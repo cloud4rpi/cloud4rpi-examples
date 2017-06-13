@@ -6,6 +6,8 @@ python:
   - "3.4"
   - "3.5"
 
+install: make init
+
 script: make ci
 
 notifications:

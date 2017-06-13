@@ -1,4 +1,7 @@
-.PHONY: style lint test
+.PHONY: init style lint test
+
+init:
+	pip install --upgrade -r requirements.txt
 
 style:
 	pep8 --show-source --show-pep8 .
