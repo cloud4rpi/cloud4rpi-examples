@@ -1,6 +1,7 @@
 
 [Cloud4RPI](https://github.com/cloud4rpi/cloud4rpi) Examples
 -----
+[![Build Status](https://travis-ci.org/cloud4rpi/cloud4rpi-examples.svg?branch=master)](https://travis-ci.org/cloud4rpi/cloud4rpi-examples)
 
 #### Common
 * [Minimal](common/minimal.py)
