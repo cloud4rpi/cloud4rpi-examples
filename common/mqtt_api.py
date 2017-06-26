@@ -50,9 +50,9 @@ def main():
     # the "useful" data except you don't have to declare any variables
     # beforehand.
     diag = {
-        'IPAddress': '127.0.0.1',
-        'Hostname': 'weather_station',
-        'CPU Load': 99
+        'IP Address': '127.0.0.1',
+        'Host': 'weather_station',
+        'CPU Temp': 57,
     }
     client.publish_diag(diag)
 

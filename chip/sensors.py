@@ -27,15 +27,15 @@ def main():
 
     # Put variable declarations here
     variables = {
-        'RoomTemp': {
+        'Room Temp': {
             'type': 'numeric',
             'bind': ds_sensors[0]
         },
-        # 'OutsideTemp': {
+        # 'Outside Temp': {
         #     'type': 'numeric',
         #     'bind': ds_sensors[1]
         # },
-        'CPU Temperature': {
+        'CPU Temp': {
             'type': 'numeric',
             'bind': chip.cpu_temp
         }

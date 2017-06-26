@@ -25,7 +25,7 @@ def main():
 
     # Put variable declarations here
     variables = {
-        'RoomTemp': {
+        'Room Temp': {
             'type': 'numeric',
             'bind': ds_sensors[0]
         },
@@ -33,17 +33,16 @@ def main():
         #     'type': 'numeric',
         #     'bind': ds_sensors[1]
         # },
-        'CPUTemp': {
+        'CPU Temp': {
             'type': 'numeric',
             'bind': rpi.cpu_temp
         }
     }
 
     diagnostics = {
-        'CPU Temperature': rpi.cpu_temp,
-        'IPAddress': rpi.ip_address,
+        'IP Address': rpi.ip_address,
         'Host': rpi.hostname,
-        'OS Name': rpi.osname
+        'Operating System': rpi.osname
     }
 
     device = cloud4rpi.Device()

@@ -73,8 +73,7 @@ def main():
             'type': 'string',
             'bind': listen_for_events
         },
-
-        'LEDOn': {
+        'LED On': {
             'type': 'bool',
             'value': False,
             'bind': led_control

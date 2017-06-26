@@ -29,7 +29,7 @@ def led_control(value=None):
 def main():
     # Put variable declarations here
     variables = {
-        'LEDOn': {
+        'LED On': {
             'type': 'bool',
             'value': False,
             'bind': led_control

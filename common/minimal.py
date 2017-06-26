@@ -42,11 +42,11 @@ POLL_INTERVAL = 0.5  # 500 ms
 def main():
     # Put variable declarations here
     variables = {
-        'RoomTemp': {
+        'Room Temp': {
             'type': 'numeric',
             'bind': room_temp
         },
-        'OutsideTemp': {
+        'Outside Temp': {
             'type': 'numeric',
             'bind': outside_temp
         }
@@ -54,10 +54,10 @@ def main():
 
     # Put system data declarations here
     diagnostics = {
-        'CPUTemp': cpu_temp,
-        'IPAddress': ip_address,
-        'Host': hostname,
-        'OS Name': osname
+        'CPU Temp': cpu_temp,
+        'IP Address': ip_address,
+        'Host Name': hostname,
+        'Operating System': osname
     }
 
     device = cloud4rpi.Device()
