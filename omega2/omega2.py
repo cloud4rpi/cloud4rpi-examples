@@ -5,23 +5,24 @@ import subprocess
 
 class Omega2(object):
     def __init__(self):
-        self.version = self.get_omega_version()
+        self.version = self.get_version()
         self.led_path = "/sys/class/leds/%s:amber:system/" % self.version
+        self.RGB_pins = {'R': '17', 'G': '16', 'B': '15'}
 
-        # https://docs.onion.io/omega2-docs/gpio-python-module.html
-        self._gpio_method = ['shell', 'python'][0]
         # https://docs.onion.io/omega2-docs/using-gpios.html#fast-gpio
-        self._gpio_tool = ['gpioctl', 'fast-gpio'][0]
+        self._gpio_tool = ['gpioctl', 'fast-gpio'][1]
 
-        if self._gpio_method == 'python':
-            # import onionGpio
-            pass  # TODO
+    def _shell(self, cmd_args, check_output=False):
+        if check_output:
+            return str(subprocess.check_output(cmd_args, shell=True))
+        else:
+            return subprocess.call(" ".join(cmd_args), shell=True)
 
     @staticmethod
-    def get_omega_version():
-        """Returns 'omega2' for Omega2 and 'omega2p' for Omega2+"""
-        return str(subprocess.check_output(
-            ["uci", "get", "system.@led[0].sysfs"])).split(":")[0]
+    def get_version():
+        """Returns 'omega2' for Omega2 and 'omega2p' for Omega2+."""
+        cmd = "uci get system.@led[0].sysfs"
+        return str(subprocess.check_output(cmd, shell=True)).split(":")[0]
 
     def led_control(self, state, delay_on=None, delay_off=None,
                     message=None, morse_speed=None):
@@ -55,83 +56,66 @@ class Omega2(object):
                     open(self.led_path + 'delay', 'w').write(morse_speed)
             return open(path, 'r').read()
 
+    def RGB_color(self, color):
+        """Set color of RGB LED on Expansion Baord.
+        Color is a string like this: '0xf21133'"""
+        return not self._shell(['expled', color])
+
     def gpio_dir_in(self, pin):
-        """Set pin direction to INPUT and don't care about logical level"""
-        if self._gpio_method == 'shell':
-            command = 'dirin' if self._gpio_tool == 'gpioctl' else 'set-input'
-            return not subprocess.call(" ".join(
-                [self._gpio_tool, command, str(pin)]), shell=True)
-        elif self._gpio_method == 'python':
-            pass
+        """Set pin direction to INPUT and don't care about logical level."""
+        method = 'dirin' if self._gpio_tool == 'gpioctl' else 'set-input'
+        return not self._shell([self._gpio_tool, method, str(pin)])
 
     def gpio_dir_in_0(self, pin):
-        """Set pin direction to INPUT and keep LOW logical level"""
-        if self._gpio_method == 'shell':
-            return not subprocess.call(
-                "gpioctl dirin-low " + str(pin), shell=True)
-        elif self._gpio_method == 'python':
-            pass
+        """Set pin direction to INPUT and keep LOW logical level."""
+        return not self._shell(["gpioctl", "dirin-low", str(pin)])
 
     def gpio_dir_in_1(self, pin):
-        """Set pin direction to INPUT and keep HIGH logical level"""
-        if self._gpio_method == 'shell':
-            return not subprocess.call(
-                "gpioctl dirin-high " + str(pin), shell=True)
-        elif self._gpio_method == 'python':
-            pass
+        """Set pin direction to INPUT and keep HIGH logical level."""
+        return not self._shell("gpioctl", "dirin-high" + str(pin))
 
     def gpio_dir_out(self, pin):
-        """Set pin direction to OUTPUT and don't care about logical level"""
-        if self._gpio_method == 'shell':
-            command = 'dirout' if self._gpio_tool == 'gpioctl' \
-                else 'set-output'
-            return not subprocess.call(
-                " ".join([self._gpio_tool, command, str(pin)]), shell=True)
-        elif self._gpio_method == 'python':
-            pass
+        """Set pin direction to OUTPUT and don't care about logical level."""
+        method = 'dirout' if self._gpio_tool == 'gpioctl' else 'set-output'
+        return not self._shell([self._gpio_tool, method, str(pin)])
 
     def gpio_dir_out_0(self, pin):
-        """Set pin direction to OUTPUT and keep LOW logical level"""
-        if self._gpio_method == 'shell':
-            return not subprocess.call(
-                "gpioctl dirout-low " + str(pin), shell=True)
-        elif self._gpio_method == 'python':
-            pass
+        """Set pin direction to OUTPUT and keep LOW logical level."""
+        return not self._shell(["gpioctl", "dirout-low", str(pin)])
 
     def gpio_dir_out_1(self, pin):
-        """Set pin direction to OUTPUT and keep HIGH logical level"""
-        if self._gpio_method == 'shell':
-            return not subprocess.call(
-                "gpioctl dirout-high " + str(pin), shell=True)
-        elif self._gpio_method == 'python':
-            pass
+        """Set pin direction to OUTPUT and keep HIGH logical level."""
+        return not self._shell(["gpioctl", "dirout-high", str(pin)])
 
     def gpio_get(self, pin):
-        """Get the logical level on the pin"""
-        if self._gpio_method == 'shell':
-            command = 'get' if self._gpio_tool == 'gpioctl' else 'read'
-            output = str(subprocess.check_output(
-                [self._gpio_tool, command, str(pin)]))
+        """Get the logical level on the pin."""
+        method = 'get' if self._gpio_tool == 'gpioctl' else 'read'
+        output = self._shell([self._gpio_tool, method, str(pin)], True)
 
-            if self._gpio_tool == 'gpioctl':
-                return True if 'HIGH' in output else \
-                    False if 'LOW' in output else None
-            else:
-                try:
-                    return bool(output.split(": ")[1])
-                except IndexError:
-                    return None
-        elif self._gpio_method == 'python':
-            pass
+        if self._gpio_tool == 'gpioctl':
+            return True if 'HIGH' in output else \
+                False if 'LOW' in output else None
+        else:
+            try:
+                return bool(output.split(": ")[1])
+            except IndexError:
+                return None
 
     def gpio_set(self, pin, value):
-        """Set the pin's logical level to value"""
-        if self._gpio_method == 'shell':
-            if self._gpio_tool == 'gpioctl':
-                arg1, arg2 = 'set' if value else 'clear', str(pin)
-            else:
-                arg1, arg2 = str(pin), str(int(value))
-            return not subprocess.call(
-                " ".join([self._gpio_tool, arg1, arg2]), shell=True)
-        elif self._gpio_method == 'python':
-            pass
+        """Set the pin's logical level to value."""
+        if self._gpio_tool == 'gpioctl':
+            arg1, arg2 = 'set' if value else 'clear', str(pin)
+            command = [self._gpio_tool, arg1, arg2]
+        else:
+            method, arg1, arg2 = "set", str(pin), str(int(value))
+            command = [self._gpio_tool, method, arg1, arg2]
+        return not self._shell(command)
+
+    def gpio_pwm(self, pin, freq, duty_cycle_percent=None):
+        """Sends PWM on a pin. Pass None to turn off."""
+        if freq:
+            return not self._shell(['fast-gpio', 'pwm',
+                                    str(pin), str(freq),
+                                    str(duty_cycle_percent)])
+        else:
+            return not self._shell(['fast-gpio', 'set', str(pin), '0'])

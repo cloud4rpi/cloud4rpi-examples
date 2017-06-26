@@ -10,33 +10,29 @@ import omega2
 # Put your device token here. To get the token,
 # sign up at https://cloud4rpi.io and create a device.
 DEVICE_TOKEN = '__YOUR_DEVICE_TOKEN__'
-
 DATA_SENDING_INTERVAL = 30  # seconds
 
-
 o2 = omega2.Omega2()
-RGB_pins = {'R': '17', 'G': '16', 'B': '15'}  # Expansion board
-
 
 def RGB_init():
-    for _, pin in RGB_pins.items():
+    for _, pin in o2.RGB_pins.items():
         o2.gpio_dir_out_1(pin)  # HIGH = OFF
 
 
 def RED_control(state):
-    pin = RGB_pins['R']
+    pin = o2.RGB_pins['R']
     if o2.gpio_set(pin, not state):
         return not o2.gpio_get(pin)
 
 
 def GREEN_control(state):
-    pin = RGB_pins['G']
+    pin = o2.RGB_pins['G']
     if o2.gpio_set(pin, not state):
         return not o2.gpio_get(pin)
 
 
 def BLUE_control(state):
-    pin = RGB_pins['B']
+    pin = o2.RGB_pins['B']
     if o2.gpio_set(pin, not state):
         return not o2.gpio_get(pin)
 
@@ -72,17 +68,26 @@ def main():
     diagnostics = {
         'Host': gethostname(),
         'Operating System': " ".join(uname()),
-        'Omega version': 'Omega2 Plus' if 'p' in o2.version else 'Omega2'
+        'Omega2 version': 'Omega2 Plus' if 'p' in o2.version else 'Omega2'
     }
 
-    device = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
+    device = cloud4rpi.Device()
     device.declare(variables)
     device.declare_diag(diagnostics)
 
+    api = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
+    cfg = device.read_config()
+    api.publish_config(cfg)
+
+    # Adds a 1 second delay to ensure device variables are created
+    sleep(1)
+
     try:
-        device.send_diag()
+        diag = device.read_diag()
+        api.publish_diag(diag)
         while True:
-            device.send_data()
+            data = device.read_data()
+            api.publish_data(data)
             sleep(DATA_SENDING_INTERVAL)
 
     except KeyboardInterrupt:
