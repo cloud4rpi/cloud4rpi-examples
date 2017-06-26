@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from time import sleep
 import sys
-import time
 import cloud4rpi
 
 
@@ -69,7 +69,7 @@ def main():
     api.publish_config(cfg)
 
     # Adds a 1 second delay to ensure device variables are created
-    time.sleep(1)
+    sleep(1)
 
     try:
         diag_timer = 0
@@ -87,7 +87,7 @@ def main():
 
             diag_timer -= POLL_INTERVAL
             data_timer -= POLL_INTERVAL
-            time.sleep(POLL_INTERVAL)
+            sleep(POLL_INTERVAL)
 
     except KeyboardInterrupt:
         cloud4rpi.log.info('Keyboard interrupt received. Stopping...')

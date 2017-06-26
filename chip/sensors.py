@@ -5,8 +5,8 @@ from socket import gethostname
 from time import sleep
 import sys
 import cloud4rpi
-import chip
 import ds18b20
+import chip
 
 # Put your device token here. To get the token,
 # sign up at https://cloud4rpi.io and create a device.
@@ -48,20 +48,29 @@ def main():
         'Operating System': " ".join(uname())
     }
 
-    device = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
+    device = cloud4rpi.device()
     device.declare(variables)
     device.declare_diag(diagnostics)
+
+    api = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
+    cfg = device.read_config()
+    api.publish_config(cfg)
+
+    # adds a 1 second delay to ensure device variables are created
+    sleep(1)
 
     try:
         diag_timer = 0
         data_timer = 0
         while True:
             if data_timer <= 0:
-                device.send_data()
+                data = device.read_data()
+                api.publish_data(data)
                 data_timer = DATA_SENDING_INTERVAL
 
             if diag_timer <= 0:
-                device.send_diag()
+                diag = device.read_diag()
+                api.publish_diag(diag)
                 diag_timer = DIAG_SENDING_INTERVAL
 
             diag_timer -= POLL_INTERVAL
