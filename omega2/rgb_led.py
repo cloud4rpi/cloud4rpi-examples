@@ -14,6 +14,7 @@ DATA_SENDING_INTERVAL = 30  # seconds
 
 o2 = omega2.Omega2()
 
+
 def RGB_init():
     for _, pin in o2.RGB_pins.items():
         o2.gpio_dir_out_1(pin)  # HIGH = OFF
