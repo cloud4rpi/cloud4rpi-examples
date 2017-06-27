@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from os import uname
+from socket import gethostname
 import sys
 import time
 import random
@@ -82,8 +84,8 @@ def main():
     diagnostics = {
         'CPU Temp': rpi.cpu_temp,
         'IP Address': rpi.ip_address,
-        'Host': rpi.hostname,
-        'Operating System': rpi.osname
+        'Host': gethostname(),
+        'Operating System': " ".join(uname())
     }
 
     device = cloud4rpi.Device()

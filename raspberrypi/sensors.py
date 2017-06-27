@@ -47,7 +47,7 @@ def main():
         'Operating System': " ".join(uname())
     }
 
-    device = cloud4rpi.device()
+    device = cloud4rpi.Device()
     device.declare(variables)
     device.declare_diag(diagnostics)
 
