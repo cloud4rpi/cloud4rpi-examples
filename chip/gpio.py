@@ -6,6 +6,8 @@ from time import sleep
 import sys
 import cloud4rpi
 import chip
+
+# Get the GPIO module here: https://github.com/xtacocorex/CHIP_IO
 import CHIP_IO.GPIO as GPIO  # pylint: disable=F0401
 
 # Put your device token here. To get the token,
