@@ -38,6 +38,7 @@ def main():
     device.declare_diag(diagnostics)
 
     api = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
+    api.on_command = device.handle_mqtt_commands(api)
     cfg = device.read_config()
     api.publish_config(cfg)
 
