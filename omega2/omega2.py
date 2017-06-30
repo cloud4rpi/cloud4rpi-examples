@@ -55,10 +55,10 @@ class Omega2(object):
                     open(self.led_path + 'delay', 'w').write(morse_speed)
             return open(path, 'r').read()
 
-    def RGB_color(self, color):
-        """Set color of RGB LED on Expansion Baord.
-        Color is a string like this: '0xf21133'"""
-        return not self._shell(['expled', color])
+    def RGB_color(self, red, green, blue):
+        """Set color of RGB LED on Expansion Baord. Color from 0 to 255"""
+        hex_color = "0x{:02x}{:02x}{:02x}".format(red, green, blue)
+        return not self._shell(['expled', hex_color])
 
     def gpio_dir_in(self, pin):
         """Set pin direction to INPUT and don't care about logical level."""
