@@ -12,6 +12,12 @@ import chip
 # sign up at https://cloud4rpi.io and create a device.
 DEVICE_TOKEN = '__YOUR_DEVICE_TOKEN__'
 
+#  / GND |────────────> GND
+# | DATA |─────────┬──> LCD-D2
+#  \ VCC |─┬─[4k7]─┘
+#          └──────────> 5V
+#  DS18B20 (bottom view)
+
 # Constants
 DATA_SENDING_INTERVAL = 30  # secs
 DIAG_SENDING_INTERVAL = 60  # secs
@@ -21,8 +27,6 @@ POLL_INTERVAL = 0.5  # 500 ms
 def main():
     # load w1 modules
     ds18b20.init_w1()
-
-    # Connect the pulled-up DATA pin of DS18B20 to LCD-D2
 
     # Detect DS18B20 temperature sensors
     ds_sensors = ds18b20.DS18b20.find_all()
