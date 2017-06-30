@@ -22,7 +22,9 @@ def main():
     # load w1 modules
     ds18b20.init_w1()
 
-    # detect DS18B20 temperature sensors
+    # Connect the pulled-up DATA pin of DS18B20 to LCD-D2
+
+    # Detect DS18B20 temperature sensors
     ds_sensors = ds18b20.DS18b20.find_all()
 
     # Put variable declarations here
@@ -48,7 +50,7 @@ def main():
         'Operating System': " ".join(uname())
     }
 
-    device = cloud4rpi.device()
+    device = cloud4rpi.Device()
     device.declare(variables)
     device.declare_diag(diagnostics)
 
