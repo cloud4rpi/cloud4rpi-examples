@@ -5,8 +5,9 @@ import subprocess
 
 class Omega2(object):
     def __init__(self):
-        self.version = self.get_version()
-        self.led_path = "/sys/class/leds/%s:amber:system/" % self.version
+        led_name = self.get_led_name()
+        self.version = led_name.split(":")[0]
+        self.led_path = "/sys/class/leds/%s/" % led_name[:-1]
         self.RGB_pins = {'R': '17', 'G': '16', 'B': '15'}
 
         # https://docs.onion.io/omega2-docs/using-gpios.html#fast-gpio
@@ -14,15 +15,13 @@ class Omega2(object):
 
     def _shell(self, cmd_args, check_output=False):
         if check_output:
-            return str(subprocess.check_output(cmd_args, shell=True))
+            return str(subprocess.check_output(cmd_args))
         else:
-            return subprocess.call(" ".join(cmd_args), shell=True)
+            return subprocess.call(cmd_args)
 
-    @staticmethod
-    def get_version():
-        """Returns 'omega2' for Omega2 and 'omega2p' for Omega2+."""
-        cmd = "uci get system.@led[0].sysfs"
-        return str(subprocess.check_output(cmd, shell=True)).split(":")[0]
+    def get_led_name(self):
+        """Returns the internal name of the onboard LED"""
+        return self._shell(['uci', 'get', 'system.@led[0].sysfs'], True)
 
     def led_control(self, state, delay_on=None, delay_off=None,
                     message=None, morse_speed=None):
