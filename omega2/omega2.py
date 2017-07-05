@@ -10,8 +10,9 @@ class Omega2(object):
         self.led_path = "/sys/class/leds/%s/" % led_name[:-1]
         self.RGB_pins = {'R': '17', 'G': '16', 'B': '15'}
 
-        # https://docs.onion.io/omega2-docs/using-gpios.html#fast-gpio
-        self._gpio_tool = ['gpioctl', 'fast-gpio'][1]
+        # https://docs.onion.io/omega2-docs/using-gpios.html
+        # NOTE: fast-gpio goes not support reading the value of output pin
+        self._gpio_tool = ['gpioctl', 'fast-gpio'][0]
 
     def _shell(self, cmd_args, check_output=False):
         if check_output:
