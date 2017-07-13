@@ -25,11 +25,3 @@ def cpu_temp():
 
 def ip_address():
     return parse_output(r'(\S*)', '?', ['hostname', '-I'])
-
-
-def hostname():
-    return parse_output(r'(\S*)', '?', ['hostname'])
-
-
-def osname():
-    return parse_output(r'(.*)', '?', ['uname', '-a'])

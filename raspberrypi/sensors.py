@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from os import uname
+from socket import gethostname
+from time import sleep
 import sys
-import time
 import cloud4rpi
 import ds18b20
 import rpi
@@ -17,33 +19,32 @@ POLL_INTERVAL = 0.5  # 500 ms
 
 
 def main():
-    # #  load w1 modules
+    # load w1 modules
     ds18b20.init_w1()
 
-    # detect ds18b20 temperature sensors
+    # detect DS18B20 temperature sensors
     ds_sensors = ds18b20.DS18b20.find_all()
 
     # Put variable declarations here
     variables = {
-        'RoomTemp': {
+        'Room Temp': {
             'type': 'numeric',
             'bind': ds_sensors[0]
         },
-        # 'OutsideTemp': {
+        # 'Outside Temp': {
         #     'type': 'numeric',
         #     'bind': ds_sensors[1]
         # },
-        'CPUTemp': {
+        'CPU Temp': {
             'type': 'numeric',
             'bind': rpi.cpu_temp
         }
     }
 
     diagnostics = {
-        'CPU Temperature': rpi.cpu_temp,
-        'IPAddress': rpi.ip_address,
-        'Host': rpi.hostname,
-        'OS Name': rpi.osname
+        'IP Address': rpi.ip_address,
+        'Host': gethostname(),
+        'Operating System': " ".join(uname())
     }
 
     device = cloud4rpi.Device()
@@ -54,8 +55,8 @@ def main():
     cfg = device.read_config()
     api.publish_config(cfg)
 
-    # Adds a 1 second delay to ensure device variables are created
-    time.sleep(1)
+    # adds a 1 second delay to ensure device variables are created
+    sleep(1)
 
     try:
         diag_timer = 0
@@ -73,7 +74,7 @@ def main():
 
             diag_timer -= POLL_INTERVAL
             data_timer -= POLL_INTERVAL
-            time.sleep(POLL_INTERVAL)
+            sleep(POLL_INTERVAL)
 
     except KeyboardInterrupt:
         cloud4rpi.log.info('Keyboard interrupt received. Stopping...')

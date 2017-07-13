@@ -1,37 +1,22 @@
 # -*- coding: utf-8 -*-
 
+from os import uname
+from socket import gethostname
 from time import sleep
 import sys
 import cloud4rpi
-
-
-# these functions will be called by device when sending data
-def room_temp():
-    return 25
-
-
-def outside_temp():
-    return 4
-
-
-def cpu_temp():
-    return 70
-
-
-def ip_address():
-    return '8.8.8.8'
-
-
-def hostname():
-    return 'hostname'
-
-
-def osname():
-    return 'osx'
+import ds18b20
+import chip
 
 # Put your device token here. To get the token,
 # sign up at https://cloud4rpi.io and create a device.
 DEVICE_TOKEN = '__YOUR_DEVICE_TOKEN__'
+
+#  / GND |────────────> GND
+# | DATA |─────────┬──> LCD-D2
+#  \ VCC |─┬─[4k7]─┘
+#          └──────────> 5V
+#  DS18B20 (bottom view)
 
 # Constants
 DATA_SENDING_INTERVAL = 30  # secs
@@ -40,24 +25,33 @@ POLL_INTERVAL = 0.5  # 500 ms
 
 
 def main():
+    # load w1 modules
+    ds18b20.init_w1()
+
+    # Detect DS18B20 temperature sensors
+    ds_sensors = ds18b20.DS18b20.find_all()
+
     # Put variable declarations here
     variables = {
         'Room Temp': {
             'type': 'numeric',
-            'bind': room_temp
+            'bind': ds_sensors[0]
         },
-        'Outside Temp': {
+        # 'Outside Temp': {
+        #     'type': 'numeric',
+        #     'bind': ds_sensors[1]
+        # },
+        'CPU Temp': {
             'type': 'numeric',
-            'bind': outside_temp
+            'bind': chip.cpu_temp
         }
     }
 
     # Put system data declarations here
     diagnostics = {
-        'CPU Temp': cpu_temp,
-        'IP Address': ip_address,
-        'Host Name': hostname,
-        'Operating System': osname
+        'IP Address': chip.ip_address,
+        'Host': gethostname(),
+        'Operating System': " ".join(uname())
     }
 
     device = cloud4rpi.Device()
@@ -68,7 +62,7 @@ def main():
     cfg = device.read_config()
     api.publish_config(cfg)
 
-    # Adds a 1 second delay to ensure device variables are created
+    # adds a 1 second delay to ensure device variables are created
     sleep(1)
 
     try:

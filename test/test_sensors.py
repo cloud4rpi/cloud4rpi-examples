@@ -14,6 +14,8 @@ sys.path.insert(0, path.join(root, 'raspberrypi'))
 from ds18b20 import DS18b20, InvalidW1Address
 import rpi
 
+from os import uname
+from socket import gethostname
 
 sensor_10 = \
     '2d 00 4d 46 ff ff 08 10 fe : crc=fe YES' '\n' \
@@ -57,13 +59,13 @@ class TestDs18b20Sensors(ffut.TestCase):
 
 class TestRpi(unittest.TestCase):
     def testHostName(self):
-        self.assertIsNotNone(rpi.hostname)
+        self.assertIsNotNone(gethostname())
 
     def testCpuTemp(self):
         self.assertIsNotNone(rpi.cpu_temp)
 
     def testOSName(self):
-        self.assertIsNotNone(rpi.osname)
+        self.assertIsNotNone(" ".join(uname()))
 
     def testIPAddress(self):
         self.assertIsNotNone(rpi.ip_address)
