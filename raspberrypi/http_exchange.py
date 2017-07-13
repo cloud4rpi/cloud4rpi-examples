@@ -14,9 +14,6 @@ DEVICE_TOKEN = '__YOUR_DEVICE_TOKEN__'
 # Constants
 DATA_SENDING_INTERVAL = 10  # secs
 POLL_INTERVAL = 0.5  # 500 ms
-LOG_FILE_PATH = 'cloud4rpi.log'
-
-cloud4rpi.set_logging_to_file(LOG_FILE_PATH)
 
 led_state = False
 

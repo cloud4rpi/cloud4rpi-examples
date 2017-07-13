@@ -15,7 +15,6 @@ import rpi
 DEVICE_TOKEN = '__YOUR_DEVICE_TOKEN__'
 
 # Constants
-LOG_FILE_PATH = '/var/log/cloud4rpi.log'
 LED_PIN = 12
 DATA_SENDING_INTERVAL = 30  # secs
 DIAG_SENDING_INTERVAL = 60  # secs
@@ -45,9 +44,7 @@ def listen_for_events():
 
 
 def main():
-    cloud4rpi.set_logging_to_file(LOG_FILE_PATH)
-
-    # #  load w1 modules
+    # load w1 modules
     ds18b20.init_w1()
 
     # detect ds18b20 temperature sensors
