@@ -12,13 +12,23 @@ The following examples are currently available:
 * [Minimal](common/minimal.py)
 * [MQTT API](common/mqtt_api.py)
 
-## Raspberry Pi
+## [Raspberry Pi](https://www.raspberrypi.org/products/)
 
 * [Sensors](raspberrypi/sensors.py)
 * [Actuator](raspberrypi/actuator.py)
 * [Status](raspberrypi/status.py)
 * [Input/Output Control](raspberrypi/control.py)
 * [Two way communication through HTTP API](raspberrypi/http_exchange.py)
+
+## [Next Thing Co. C.H.I.P.](https://getchip.com/pages/chip)
+
+* [Input/Output Control](chip/gpio.py)
+* [Sensors](chip/sensors.py)
+
+## [Onion Omega2](https://onion.io/omega2/)
+
+* [Onboard LED control](omega2/led.py)
+* [Input/Output Control](omega2/rgb_led.py) (using [RGB LED](https://docs.onion.io/omega2-docs/expansion-dock.html#rgb-led) pins)
 
 ## See Also
 
