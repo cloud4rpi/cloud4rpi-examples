@@ -35,12 +35,11 @@ def main():
         }
     }
 
-    device = cloud4rpi.Device()
+    device = cloud4rpi.connect(DEVICE_TOKEN)
     device.declare(variables)
 
-    api = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
     cfg = device.read_config()
-    api.publish_config(cfg)
+    device.publish_config(cfg)
 
     # Adds a 1 second delay to ensure device variables are created
     time.sleep(1)
@@ -50,7 +49,7 @@ def main():
         while True:
             if data_timer <= 0:
                 data = device.read_data()
-                api.publish_data(data)
+                device.publish_data(data)
                 data_timer = DATA_SENDING_INTERVAL
 
             data_timer -= POLL_INTERVAL

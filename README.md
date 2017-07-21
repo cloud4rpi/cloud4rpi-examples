@@ -18,7 +18,6 @@ The following examples are currently available:
 * [Actuator](raspberrypi/actuator.py)
 * [Status](raspberrypi/status.py)
 * [Input/Output Control](raspberrypi/control.py)
-* [Two way communication through HTTP API](raspberrypi/http_exchange.py)
 
 ## [Next Thing Co. C.H.I.P.](https://getchip.com/pages/chip)
 
