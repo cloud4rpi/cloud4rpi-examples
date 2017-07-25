@@ -76,18 +76,15 @@ def main():
     device.declare(variables)
     device.declare_diag(diagnostics)
 
-    cfg = device.read_config()
-    device.publish_config(cfg)
+    device.publish_config()
 
     # Adds a 1 second delay to ensure device variables are created
     sleep(1)
 
     try:
-        diag = device.read_diag()
-        device.publish_diag(diag)
+        device.publish_diag()
         while True:
-            data = device.read_data()
-            device.publish_data(data)
+            device.publish_data()
             sleep(DATA_SENDING_INTERVAL)
 
     except KeyboardInterrupt:

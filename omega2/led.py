@@ -37,15 +37,12 @@ def main():
     device.declare(variables)
     device.declare_diag(diagnostics)
 
-    cfg = device.read_config()
-    device.publish_config(cfg)
+    device.publish_config()
 
     try:
-        diag = device.read_diag()
-        device.publish_diag(diag)
+        device.publish_diag()
         while True:
-            data = device.read_data()
-            device.publish_data(data)
+            device.publish_data()
             sleep(DATA_SENDING_INTERVAL)
 
     except KeyboardInterrupt:
