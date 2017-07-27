@@ -33,21 +33,16 @@ def main():
         'Omega2 version': 'Omega2 Plus' if 'p' in o2.version else 'Omega2'
     }
 
-    device = cloud4rpi.Device()
+    device = cloud4rpi.connect(DEVICE_TOKEN)
     device.declare(variables)
     device.declare_diag(diagnostics)
 
-    api = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
-    api.on_command = device.handle_mqtt_commands(api)
-    cfg = device.read_config()
-    api.publish_config(cfg)
+    device.publish_config()
 
     try:
-        diag = device.read_diag()
-        api.publish_diag(diag)
+        device.publish_diag()
         while True:
-            data = device.read_data()
-            api.publish_data(data)
+            device.publish_data()
             sleep(DATA_SENDING_INTERVAL)
 
     except KeyboardInterrupt:

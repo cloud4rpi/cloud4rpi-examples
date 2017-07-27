@@ -7,7 +7,7 @@ style:
 	pep8 --show-source --show-pep8 .
 
 lint:
-	pylint --rcfile=.pylintrc --reports=n common/*.py raspberrypi/*.py test/*.py
+	pylint --rcfile=.pylintrc --reports=n common/*.py raspberrypi/*.py chip/*.py omega2/*.py test/*.py
 
 test:
 	python -m unittest discover test

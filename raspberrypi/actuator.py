@@ -35,14 +35,10 @@ def main():
             'bind': led_control
         }
     }
-    device = cloud4rpi.Device()
+    device = cloud4rpi.connect(DEVICE_TOKEN)
     device.declare(variables)
 
-    api = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
-    api.on_command = device.handle_mqtt_commands(api)
-
-    cfg = device.read_config()
-    api.publish_config(cfg)
+    device.publish_config()
 
     # Adds a 1 second delay to ensure device variables are created
     time.sleep(1)
@@ -51,8 +47,7 @@ def main():
         data_timer = 0
         while True:
             if data_timer <= 0:
-                data = device.read_data()
-                api.publish_data(data)
+                device.publish_data()
                 data_timer = DATA_SENDING_INTERVAL
 
             time.sleep(POLL_INTERVAL)

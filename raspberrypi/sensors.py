@@ -47,13 +47,11 @@ def main():
         'Operating System': " ".join(uname())
     }
 
-    device = cloud4rpi.Device()
+    device = cloud4rpi.connect(DEVICE_TOKEN)
     device.declare(variables)
     device.declare_diag(diagnostics)
 
-    api = cloud4rpi.connect_mqtt(DEVICE_TOKEN)
-    cfg = device.read_config()
-    api.publish_config(cfg)
+    device.publish_config()
 
     # adds a 1 second delay to ensure device variables are created
     sleep(1)
@@ -63,13 +61,11 @@ def main():
         data_timer = 0
         while True:
             if data_timer <= 0:
-                data = device.read_data()
-                api.publish_data(data)
+                device.publish_data()
                 data_timer = DATA_SENDING_INTERVAL
 
             if diag_timer <= 0:
-                diag = device.read_diag()
-                api.publish_diag(diag)
+                device.publish_diag()
                 diag_timer = DIAG_SENDING_INTERVAL
 
             diag_timer -= POLL_INTERVAL
