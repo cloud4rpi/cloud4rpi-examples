@@ -1,9 +1,8 @@
 Cloud4RPi Examples
 =======
 
-[DEPRECATED] Use the official cloud4rpi examples at https://github.com/cloud4rpi
-
-***!!! DO_NOT_USE_THIS_CODE_AS_EXAMPLES !!!***
+## !!! DO NOT USE THIS CODE !!!
+## [DEPRECATED] Use the official cloud4rpi examples at https://github.com/cloud4rpi
 
 This repository contains examples of [Cloud4RPi](https://cloud4rpi.io/) service usage.
 
