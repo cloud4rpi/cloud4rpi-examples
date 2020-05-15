@@ -1,6 +1,10 @@
 Cloud4RPi Examples
 =======
 
+[DEPRECATED] Use the official cloud4rpi examples at https://github.com/cloud4rpi
+
+***!!! DO_NOT_USE_THIS_CODE_AS_EXAMPLES !!!***
+
 This repository contains examples of [Cloud4RPi](https://cloud4rpi.io/) service usage.
 
 [![Build Status](https://travis-ci.org/cloud4rpi/cloud4rpi-examples.svg?branch=master)](https://travis-ci.org/cloud4rpi/cloud4rpi-examples)
